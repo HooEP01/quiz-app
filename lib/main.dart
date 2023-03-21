@@ -31,6 +31,25 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Widget> scoreKeeper = [];
+
+  List<String> questions = [
+    'Are plants always green?',
+    'Are boats always float?',
+    'Approximately one quarter of human bones are in the feet',
+    'End',
+  ];
+
+  List<bool> answers = [
+    false,
+    false,
+    true,
+  ];
+
+  int number = 0;
+
+  bool isCorrect = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,8 +59,8 @@ class _QuizPageState extends State<QuizPage> {
           flex: 7,
           child: Center(
             child: Text(
-              'This is where the question is going to go.',
-              style: TextStyle(color: Colors.white70, fontSize: 20),
+              questions[number],
+              style: const TextStyle(color: Colors.white70, fontSize: 20),
               textAlign: TextAlign.center,
             ),
           ),
@@ -53,13 +72,37 @@ class _QuizPageState extends State<QuizPage> {
             child: TextButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.green),
+                      (states) => Colors.green),
                   foregroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.white),
+                      (states) => Colors.white),
                   shape: MaterialStateProperty.resolveWith(
-                          (states) => BeveledRectangleBorder())),
-              child: Text('True'),
+                      (states) => const BeveledRectangleBorder())),
+              child: const Text('True'),
               onPressed: () {
+                if (answers[number] == true) {
+                  isCorrect = true;
+                }
+                setState(() {
+                  if (isCorrect) {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+                  if (questions.length >= number) {
+                    number = number + 1;
+                  }
+                });
               },
             ),
           ),
@@ -71,25 +114,45 @@ class _QuizPageState extends State<QuizPage> {
             child: TextButton(
               style: ButtonStyle(
                   backgroundColor:
-                  MaterialStateProperty.resolveWith((states) => Colors.red),
+                      MaterialStateProperty.resolveWith((states) => Colors.red),
                   foregroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.white),
+                      (states) => Colors.white),
                   shape: MaterialStateProperty.resolveWith(
-                          (states) => BeveledRectangleBorder())),
-              child: Text('False'),
+                      (states) => const BeveledRectangleBorder())),
+              child: const Text('False'),
               onPressed: () {
+                if (answers[number] == false) {
+                  isCorrect = true;
+                }
+                setState(() {
+                  if (isCorrect) {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+
+                  if (questions.length >= number) {
+                    number = number + 1;
+                  }
+                });
               },
             ),
           ),
         ),
-        //TODO: Add a Row widget here as your scorekeeper
+        Row(
+          children: scoreKeeper,
+        ),
       ],
     );
   }
 }
-
-/*
-Question1: 'Are plants always green?', false,
-Question2: 'Are boats always float?', false,
-Question3: 'Approximately one quarter of human bones are in the feet', true,
-* */
